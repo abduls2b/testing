@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    { "source": "/api/channels", "destination": "/api/channels" },
+    { "source": "/api/categories", "destination": "/api/categories" },
+    { "source": "/api/token", "destination": "/api/token" },
+    { "source": "/api/star-sports", "destination": "/api/star-sports" },
+    { "source": "/api/proxy/jio-channels", "destination": "/api/proxy/jio-channels" },
+    { "source": "/api/proxy/token", "destination": "/api/proxy/token" },
+    { "source": "/docs", "destination": "/docs.html" },
+    { "source": "/((?!api|docs).*)", "destination": "/index.html" }
+  ]
+}

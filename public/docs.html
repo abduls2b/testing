@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>uvylive API — Documentation</title>
+  <meta name="description" content="Official API documentation for uvylive — JioTV live streaming API" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f5f5f7;
+      --surface: #ffffff;
+      --surface2: #f5f5f7;
+      --surface3: #e8e8ed;
+      --border: rgba(0,0,0,0.08);
+      --border2: rgba(0,0,0,0.12);
+      --text: #1d1d1f;
+      --text2: #424245;
+      --text3: #6e6e73;
+      --text4: #86868b;
+      --accent: #0071e3;
+      --accent-hover: #0077ed;
+      --accent-light: #e8f1fb;
+      --green: #28cd41;
+      --green-light: #e8f7eb;
+      --orange: #ff9500;
+      --orange-light: #fff3e0;
+      --red: #ff3b30;
+      --red-light: #ffeceb;
+      --purple: #8b5cf6;
+      --purple-light: #f0ebff;
+      --code-bg: #f0f0f5;
+      --code-text: #1d1d1f;
+      --sidebar-w: 260px;
+      --radius: 12px;
+      --radius-sm: 8px;
+      --shadow: 0 2px 20px rgba(0,0,0,0.08);
+      --shadow-lg: 0 8px 40px rgba(0,0,0,0.12);
+      --font: -apple-system, 'SF Pro Display', 'Helvetica Neue', sans-serif;
+      --font-mono: 'SF Mono', 'Fira Code', ui-monospace, monospace;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── NAV ── */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      height: 52px;
+      background: rgba(245,245,247,0.85);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 24px;
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 15px; font-weight: 600; color: var(--text);
+      text-decoration: none;
+    }
+    .nav-logo-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--red);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%,100% { opacity:1; transform:scale(1); }
+      50% { opacity:0.5; transform:scale(0.8); }
+    }
+    .nav-badge {
+      font-size: 11px; font-weight: 500; color: var(--text4);
+      background: var(--surface3); border-radius: 20px;
+      padding: 2px 10px; letter-spacing: 0.01em;
+    }
+    .nav-right { display:flex; align-items:center; gap:16px; }
+    .nav-link {
+      font-size: 13px; color: var(--text3);
+      text-decoration: none; font-weight: 400;
+      transition: color 0.15s;
+    }
+    .nav-link:hover { color: var(--accent); }
+    .nav-cta {
+      font-size: 13px; font-weight: 500; color: var(--accent);
+      background: var(--accent-light); border-radius: 20px;
+      padding: 5px 14px; text-decoration: none;
+      transition: background 0.15s;
+    }
+    .nav-cta:hover { background: #d5e8f9; }
+
+    /* ── LAYOUT ── */
+    .layout {
+      display: flex;
+      padding-top: 52px;
+      min-height: 100vh;
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      position: fixed; top: 52px; left: 0; bottom: 0;
+      width: var(--sidebar-w);
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      overflow-y: auto; padding: 28px 0;
+      scrollbar-width: none;
+    }
+    .sidebar::-webkit-scrollbar { display: none; }
+
+    .sidebar-section { margin-bottom: 8px; }
+    .sidebar-label {
+      font-size: 11px; font-weight: 600; color: var(--text4);
+      letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 4px 20px 8px;
+    }
+    .sidebar-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 7px 20px; font-size: 14px; color: var(--text2);
+      text-decoration: none; border-radius: 0;
+      transition: background 0.1s, color 0.1s;
+      cursor: pointer; border: none; background: none;
+      width: 100%; text-align: left;
+    }
+    .sidebar-item:hover { background: var(--surface2); color: var(--text); }
+    .sidebar-item.active {
+      background: var(--accent-light); color: var(--accent);
+      font-weight: 500;
+    }
+    .sidebar-item.active .method-badge { background: var(--accent); color: #fff; }
+    .method-badge {
+      font-size: 9px; font-weight: 700; letter-spacing: 0.04em;
+      padding: 2px 6px; border-radius: 4px;
+      background: var(--surface3); color: var(--text3);
+      flex-shrink: 0; font-family: var(--font-mono);
+    }
+    .method-get { background: var(--green-light); color: var(--green); }
+
+    /* ── MAIN CONTENT ── */
+    .main {
+      margin-left: var(--sidebar-w);
+      flex: 1;
+      padding: 48px 64px 80px;
+      max-width: 900px;
+    }
+
+    /* ── SECTIONS ── */
+    .section { margin-bottom: 80px; }
+    section:target { scroll-margin-top: 72px; }
+
+    /* ── HERO ── */
+    .hero {
+      margin-bottom: 64px;
+      padding: 48px;
+      background: var(--surface);
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; top: 0; right: 0;
+      width: 300px; height: 300px;
+      background: radial-gradient(ellipse at top right, rgba(0,113,227,0.06), transparent 70%);
+      pointer-events: none;
+    }
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 12px; font-weight: 600; color: var(--accent);
+      letter-spacing: 0.05em; text-transform: uppercase;
+      background: var(--accent-light); border-radius: 20px;
+      padding: 4px 12px; margin-bottom: 20px;
+    }
+    .hero-title {
+      font-size: 48px; font-weight: 700;
+      letter-spacing: -0.03em; line-height: 1.1;
+      color: var(--text); margin-bottom: 16px;
+    }
+    .hero-title span { color: var(--accent); }
+    .hero-sub {
+      font-size: 17px; color: var(--text3);
+      max-width: 520px; line-height: 1.6; margin-bottom: 32px;
+      font-weight: 400;
+    }
+    .hero-chips { display: flex; flex-wrap: wrap; gap: 10px; }
+    .chip {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 13px; font-weight: 500; color: var(--text2);
+      background: var(--surface2); border: 1px solid var(--border2);
+      border-radius: 20px; padding: 6px 14px;
+    }
+    .chip-dot { width: 6px; height: 6px; border-radius: 50%; }
+
+    /* ── SECTION HEADINGS ── */
+    .section-title {
+      font-size: 28px; font-weight: 700;
+      letter-spacing: -0.02em; margin-bottom: 6px;
+      color: var(--text);
+    }
+    .section-sub {
+      font-size: 15px; color: var(--text3); margin-bottom: 28px;
+      font-weight: 400;
+    }
+
+    /* ── ENDPOINT CARD ── */
+    .endpoint-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 24px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: box-shadow 0.2s;
+    }
+    .endpoint-card:hover { box-shadow: var(--shadow-lg); }
+
+    .endpoint-header {
+      padding: 20px 24px;
+      display: flex; align-items: center; gap: 14px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+    }
+    .method-pill {
+      font-size: 12px; font-weight: 700; letter-spacing: 0.04em;
+      padding: 4px 10px; border-radius: 6px;
+      font-family: var(--font-mono); flex-shrink: 0;
+    }
+    .method-pill.get { background: var(--green-light); color: var(--green); }
+
+    .endpoint-path {
+      font-family: var(--font-mono); font-size: 15px;
+      color: var(--text); font-weight: 500; flex: 1;
+    }
+    .endpoint-desc {
+      font-size: 13px; color: var(--text3); margin-left: auto;
+      max-width: 220px; text-align: right; flex-shrink: 0;
+    }
+
+    .endpoint-body { padding: 24px; }
+
+    .param-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+    .param-table th {
+      font-size: 11px; font-weight: 600; color: var(--text4);
+      letter-spacing: 0.06em; text-transform: uppercase;
+      padding: 8px 12px; text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    .param-table td {
+      padding: 10px 12px; font-size: 13.5px;
+      border-bottom: 1px solid var(--border); vertical-align: top;
+    }
+    .param-table tr:last-child td { border-bottom: none; }
+    .param-name { font-family: var(--font-mono); font-size: 13px; color: var(--text); }
+    .param-type {
+      font-family: var(--font-mono); font-size: 11px;
+      background: var(--purple-light); color: var(--purple);
+      padding: 2px 7px; border-radius: 4px;
+    }
+    .param-opt {
+      font-size: 10px; font-weight: 600; color: var(--text4);
+      background: var(--surface3); padding: 2px 7px;
+      border-radius: 4px; letter-spacing: 0.04em;
+    }
+    .param-req {
+      font-size: 10px; font-weight: 600; color: var(--orange);
+      background: var(--orange-light); padding: 2px 7px;
+      border-radius: 4px; letter-spacing: 0.04em;
+    }
+
+    /* ── CODE BLOCKS ── */
+    .code-block-wrap { margin-bottom: 16px; }
+    .code-label {
+      display: flex; align-items: center; justify-content: space-between;
+      font-size: 11px; font-weight: 600; color: var(--text4);
+      letter-spacing: 0.06em; text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .copy-btn {
+      display: flex; align-items: center; gap: 5px;
+      font-size: 11px; font-weight: 500; color: var(--accent);
+      background: var(--accent-light); border: none;
+      border-radius: 6px; padding: 3px 10px; cursor: pointer;
+      transition: background 0.15s; font-family: var(--font);
+    }
+    .copy-btn:hover { background: #d5e8f9; }
+    .copy-btn.copied { color: var(--green); background: var(--green-light); }
+
+    pre {
+      background: #1c1c1e;
+      border-radius: var(--radius-sm);
+      padding: 18px 20px;
+      overflow-x: auto;
+      font-size: 13px;
+      line-height: 1.65;
+      font-family: var(--font-mono);
+      scrollbar-width: thin;
+      scrollbar-color: #3a3a3c transparent;
+    }
+    pre::-webkit-scrollbar { height: 4px; }
+    pre::-webkit-scrollbar-track { background: transparent; }
+    pre::-webkit-scrollbar-thumb { background: #3a3a3c; border-radius: 4px; }
+
+    code { font-family: var(--font-mono); }
+
+    .tok-key { color: #ff6b9d; }
+    .tok-str { color: #ffd60a; }
+    .tok-num { color: #30d158; }
+    .tok-bool { color: #bf5af2; }
+    .tok-null { color: #ff9f0a; }
+    .tok-comment { color: #636366; font-style: italic; }
+    .tok-method { color: #0a84ff; }
+    .tok-url { color: #64d2ff; }
+    .tok-kw { color: #ff375f; }
+    .tok-var { color: #ffd60a; }
+    .tok-fn { color: #30d158; }
+
+    /* ── RESPONSE SCHEMA ── */
+    .schema-card {
+      background: var(--code-bg); border-radius: var(--radius-sm);
+      padding: 16px 20px; margin-bottom: 16px;
+    }
+    .schema-row {
+      display: flex; align-items: baseline; gap: 10px;
+      padding: 5px 0; border-bottom: 1px solid rgba(0,0,0,0.05);
+      font-size: 13.5px;
+    }
+    .schema-row:last-child { border-bottom: none; }
+    .schema-key { font-family: var(--font-mono); font-size: 13px; color: var(--text); min-width: 120px; }
+    .schema-type { font-size: 11px; color: var(--purple); font-family: var(--font-mono); }
+    .schema-desc { color: var(--text3); font-size: 13px; }
+
+    /* ── STATUS BADGES ── */
+    .status-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+    .status-badge {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 12px; font-weight: 600; padding: 5px 12px;
+      border-radius: 8px; font-family: var(--font-mono);
+    }
+    .s200 { background: var(--green-light); color: var(--green); }
+    .s400 { background: var(--orange-light); color: var(--orange); }
+    .s500 { background: var(--red-light); color: var(--red); }
+
+    /* ── BASE URL BOX ── */
+    .base-url-box {
+      display: flex; align-items: center; gap: 12px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 16px 20px;
+      margin-bottom: 24px; box-shadow: var(--shadow);
+    }
+    .base-url-label {
+      font-size: 11px; font-weight: 700; color: var(--text4);
+      letter-spacing: 0.08em; text-transform: uppercase;
+      flex-shrink: 0;
+    }
+    .base-url-val {
+      font-family: var(--font-mono); font-size: 14px;
+      color: var(--accent); font-weight: 500; flex: 1;
+    }
+
+    /* ── INFO BOX ── */
+    .info-box {
+      display: flex; gap: 12px;
+      background: var(--accent-light); border-left: 3px solid var(--accent);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      padding: 14px 18px; margin-bottom: 20px; font-size: 14px;
+      color: var(--text2); line-height: 1.5;
+    }
+    .info-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+    /* ── QUICK START ── */
+    .tabs { display: flex; gap: 2px; background: var(--surface3); border-radius: 10px; padding: 3px; margin-bottom: 16px; width: fit-content; }
+    .tab {
+      font-size: 12px; font-weight: 500; color: var(--text3);
+      padding: 6px 16px; border-radius: 8px; cursor: pointer;
+      border: none; background: transparent; transition: all 0.15s;
+      font-family: var(--font);
+    }
+    .tab.active { background: var(--surface); color: var(--text); box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    /* ── DIVIDER ── */
+    .divider { height: 1px; background: var(--border); margin: 40px 0; }
+
+    /* ── SCROLLSPY ── */
+    html { scroll-padding-top: 72px; }
+
+    /* ── MOBILE ── */
+    @media (max-width: 768px) {
+      .sidebar { display: none; }
+      .main { margin-left: 0; padding: 24px 20px 60px; }
+      .hero { padding: 28px; }
+      .hero-title { font-size: 32px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="#" class="nav-logo">
+    <span class="nav-logo-dot"></span>
+    uvylive
+  </a>
+  <span class="nav-badge">API v1</span>
+  <div class="nav-right">
+    <a href="#quickstart" class="nav-link">Quick Start</a>
+    <a href="#endpoints" class="nav-link">Endpoints</a>
+    <a href="/" class="nav-cta">← App</a>
+  </div>
+</nav>
+
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Overview</div>
+      <a href="#overview" class="sidebar-item active">Introduction</a>
+      <a href="#baseurl" class="sidebar-item">Base URL</a>
+      <a href="#quickstart" class="sidebar-item">Quick Start</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Endpoints</div>
+      <a href="#ep-channels" class="sidebar-item">
+        <span class="method-badge method-get">GET</span>
+        /api/channels
+      </a>
+      <a href="#ep-categories" class="sidebar-item">
+        <span class="method-badge method-get">GET</span>
+        /api/categories
+      </a>
+      <a href="#ep-token" class="sidebar-item">
+        <span class="method-badge method-get">GET</span>
+        /api/token
+      </a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Player</div>
+      <a href="#player" class="sidebar-item">Shaka Player Setup</a>
+      <a href="#player-clearkey" class="sidebar-item">ClearKey DRM</a>
+      <a href="#player-token" class="sidebar-item">Token Auth</a>
+      <a href="#player-react" class="sidebar-item">React Component</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Reference</div>
+      <a href="#schemas" class="sidebar-item">Schemas</a>
+      <a href="#errors" class="sidebar-item">Errors</a>
+      <a href="#caching" class="sidebar-item">Caching</a>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- HERO -->
+    <div class="hero" id="overview">
+      <div class="hero-eyebrow">
+        <span class="nav-logo-dot" style="animation:pulse 2s infinite"></span>
+        Live Now
+      </div>
+      <h1 class="hero-title">uvylive <span>API</span></h1>
+      <p class="hero-sub">A simple REST API for JioTV live channel data — stream URLs, ClearKey DRM credentials, categories, and auth tokens.</p>
+      <div class="hero-chips">
+        <div class="chip"><span class="chip-dot" style="background:var(--green)"></span> REST / JSON</div>
+        <div class="chip"><span class="chip-dot" style="background:var(--accent)"></span> CORS Enabled</div>
+        <div class="chip"><span class="chip-dot" style="background:var(--orange)"></span> Edge Cached</div>
+        <div class="chip"><span class="chip-dot" style="background:var(--purple)"></span> No Auth Required</div>
+      </div>
+    </div>
+
+    <!-- BASE URL -->
+    <section class="section" id="baseurl">
+      <h2 class="section-title">Base URL</h2>
+      <p class="section-sub">All endpoints are relative to the base URL below.</p>
+      <div class="base-url-box">
+        <span class="base-url-label">Production</span>
+        <span class="base-url-val">https://uvylive.vercel.app</span>
+        <button class="copy-btn" onclick="copyText('https://uvylive.vercel.app', this)">Copy</button>
+      </div>
+      <div class="info-box">
+        <span class="info-icon">ℹ️</span>
+        All responses are <code>application/json</code> with CORS headers set to <code>*</code>. No API key is needed.
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- QUICK START -->
+    <section class="section" id="quickstart">
+      <h2 class="section-title">Quick Start</h2>
+      <p class="section-sub">Get all JioTV channels in one fetch call.</p>
+
+      <div class="tabs">
+        <button class="tab active" onclick="switchTab(event, 'qs')">fetch</button>
+        <button class="tab" onclick="switchTab(event, 'qs')">curl</button>
+        <button class="tab" onclick="switchTab(event, 'qs')">axios</button>
+      </div>
+
+      <div class="tab-content active" id="qs-0">
+        <div class="code-block-wrap">
+          <div class="code-label">
+            JavaScript
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+<pre><span class="tok-kw">const</span> <span class="tok-var">res</span> = <span class="tok-kw">await</span> <span class="tok-fn">fetch</span>(<span class="tok-str">'https://uvylive.vercel.app/api/channels'</span>);
+<span class="tok-kw">const</span> { <span class="tok-var">channels</span>, <span class="tok-var">total</span> } = <span class="tok-kw">await</span> <span class="tok-var">res</span>.<span class="tok-fn">json</span>();
+
+<span class="tok-fn">console</span>.<span class="tok-fn">log</span>(<span class="tok-str">`Loaded <span class="tok-var">${total}</span> channels`</span>);
+<span class="tok-comment">// → Loaded 312 channels</span>
+
+<span class="tok-comment">// Filter by category</span>
+<span class="tok-kw">const</span> <span class="tok-var">sports</span> = <span class="tok-kw">await</span> <span class="tok-fn">fetch</span>(<span class="tok-str">'https://uvylive.vercel.app/api/channels?category=Sports'</span>);
+</pre>
+        </div>
+      </div>
+
+      <div class="tab-content" id="qs-1">
+        <div class="code-block-wrap">
+          <div class="code-label">
+            Shell
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+<pre><span class="tok-comment"># Get all channels</span>
+curl https://uvylive.vercel.app/api/channels
+
+<span class="tok-comment"># Filter by category</span>
+curl <span class="tok-str">"https://uvylive.vercel.app/api/channels?category=Sports"</span>
+
+<span class="tok-comment"># Search by name</span>
+curl <span class="tok-str">"https://uvylive.vercel.app/api/channels?search=star"</span>
+</pre>
+        </div>
+      </div>
+
+      <div class="tab-content" id="qs-2">
+        <div class="code-block-wrap">
+          <div class="code-label">
+            JavaScript (axios)
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+<pre><span class="tok-kw">import</span> axios <span class="tok-kw">from</span> <span class="tok-str">'axios'</span>;
+
+<span class="tok-kw">const</span> { <span class="tok-var">data</span> } = <span class="tok-kw">await</span> axios.<span class="tok-fn">get</span>(<span class="tok-str">'https://uvylive.vercel.app/api/channels'</span>, {
+  params: { category: <span class="tok-str">'News'</span>, limit: <span class="tok-num">20</span> }
+});
+
+<span class="tok-fn">console</span>.<span class="tok-fn">log</span>(<span class="tok-var">data</span>.channels);
+</pre>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ENDPOINTS -->
+    <section class="section" id="endpoints">
+      <h2 class="section-title">Endpoints</h2>
+      <p class="section-sub">Three public, no-auth endpoints.</p>
+    </section>
+
+    <!-- GET /api/channels -->
+    <section id="ep-channels">
+      <div class="endpoint-card">
+        <div class="endpoint-header">
+          <span class="method-pill get">GET</span>
+          <span class="endpoint-path">/api/channels</span>
+          <span class="endpoint-desc">List all JioTV channels</span>
+        </div>
+        <div class="endpoint-body">
+
+          <div class="code-label" style="margin-bottom:12px">Query Parameters</div>
+          <table class="param-table">
+            <thead>
+              <tr>
+                <th>Parameter</th><th>Type</th><th>Required</th><th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="param-name">category</span></td>
+                <td><span class="param-type">string</span></td>
+                <td><span class="param-opt">optional</span></td>
+                <td style="color:var(--text3)">Filter by category name (e.g. <code>Sports</code>, <code>News</code>). Case-insensitive.</td>
+              </tr>
+              <tr>
+                <td><span class="param-name">search</span></td>
+                <td><span class="param-type">string</span></td>
+                <td><span class="param-opt">optional</span></td>
+                <td style="color:var(--text3)">Search channels by name. Partial match, case-insensitive.</td>
+              </tr>
+              <tr>
+                <td><span class="param-name">limit</span></td>
+                <td><span class="param-type">number</span></td>
+                <td><span class="param-opt">optional</span></td>
+                <td style="color:var(--text3)">Max channels to return. Defaults to all.</td>
+              </tr>
+              <tr>
+                <td><span class="param-name">offset</span></td>
+                <td><span class="param-type">number</span></td>
+                <td><span class="param-opt">optional</span></td>
+                <td style="color:var(--text3)">Number of channels to skip. Default <code>0</code>.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="status-row">
+            <span class="status-badge s200">200 OK</span>
+            <span class="status-badge s500">500 Server Error</span>
+          </div>
+
+          <div class="code-block-wrap">
+            <div class="code-label">Response <button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+<pre>{
+  <span class="tok-key">"total"</span>: <span class="tok-num">312</span>,
+  <span class="tok-key">"offset"</span>: <span class="tok-num">0</span>,
+  <span class="tok-key">"limit"</span>: <span class="tok-num">312</span>,
+  <span class="tok-key">"channels"</span>: [
+    {
+      <span class="tok-key">"id"</span>: <span class="tok-str">"star-sports-1"</span>,
+      <span class="tok-key">"name"</span>: <span class="tok-str">"Star Sports 1"</span>,
+      <span class="tok-key">"category"</span>: <span class="tok-str">"Sports"</span>,
+      <span class="tok-key">"logo"</span>: <span class="tok-str">"https://..."</span>,
+      <span class="tok-key">"url"</span>: <span class="tok-str">"https://...manifest.mpd"</span>,
+      <span class="tok-key">"keyId"</span>: <span class="tok-str">"abc123..."</span>,   <span class="tok-comment">// ClearKey DRM key ID</span>
+      <span class="tok-key">"key"</span>: <span class="tok-str">"def456..."</span>,    <span class="tok-comment">// ClearKey DRM key</span>
+      <span class="tok-key">"licenseUrl"</span>: <span class="tok-null">null</span>
+    }
+  ]
+}
+</pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- GET /api/categories -->
+    <section id="ep-categories">
+      <div class="endpoint-card">
+        <div class="endpoint-header">
+          <span class="method-pill get">GET</span>
+          <span class="endpoint-path">/api/categories</span>
+          <span class="endpoint-desc">List all channel categories</span>
+        </div>
+        <div class="endpoint-body">
+
+          <div class="info-box">
+            <span class="info-icon">💡</span>
+            Without params: returns a sorted list of all unique category names, cached 10 min. With <code>?category=Sports</code>: returns all channels in that category (same shape as <code>/api/channels</code>).
+          </div>
+
+          <table class="param-table">
+            <thead><tr><th>Param</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><span class="param-name">category</span></td>
+                <td><span class="param-type">string</span></td>
+                <td><span class="param-opt">optional</span></td>
+                <td style="color:var(--text3)">Filter to channels in this category. Case-insensitive. e.g. <code>Sports</code>, <code>News</code>, <code>Entertainment</code></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="status-row">
+            <span class="status-badge s200">200 OK</span>
+            <span class="status-badge s500">500 Server Error</span>
+          </div>
+
+          <div class="tabs">
+            <button class="tab active" onclick="switchTab(event, 'cats')">List categories</button>
+            <button class="tab" onclick="switchTab(event, 'cats')">Filter by category</button>
+          </div>
+
+          <div class="tab-content active" id="cats-0">
+            <div class="code-block-wrap">
+              <div class="code-label">GET /api/categories <button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+<pre>{
+  <span class="tok-key">"total"</span>: <span class="tok-num">14</span>,
+  <span class="tok-key">"categories"</span>: [
+    <span class="tok-str">"Entertainment"</span>,
+    <span class="tok-str">"Kids"</span>,
+    <span class="tok-str">"Movies"</span>,
+    <span class="tok-str">"Music"</span>,
+    <span class="tok-str">"News"</span>,
+    <span class="tok-str">"Regional"</span>,
+    <span class="tok-str">"Sports"</span>
+    <span class="tok-comment">// ...</span>
+  ]
+}
+</pre>
+            </div>
+          </div>
+
+          <div class="tab-content" id="cats-1">
+            <div class="code-block-wrap">
+              <div class="code-label">GET /api/categories?category=Sports <button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+<pre>{
+  <span class="tok-key">"category"</span>: <span class="tok-str">"Sports"</span>,
+  <span class="tok-key">"total"</span>: <span class="tok-num">24</span>,
+  <span class="tok-key">"channels"</span>: [
+    {
+      <span class="tok-key">"id"</span>: <span class="tok-str">"star-sports-1"</span>,
+      <span class="tok-key">"name"</span>: <span class="tok-str">"Star Sports 1"</span>,
+      <span class="tok-key">"category"</span>: <span class="tok-str">"Sports"</span>,
+      <span class="tok-key">"url"</span>: <span class="tok-str">"https://..."</span>,
+      <span class="tok-key">"keyId"</span>: <span class="tok-str">"abc123..."</span>,
+      <span class="tok-key">"key"</span>: <span class="tok-str">"def456..."</span>
+    }
+    <span class="tok-comment">// ...</span>
+  ]
+}
+</pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- GET /api/token -->
+    <section id="ep-token">
+      <div class="endpoint-card">
+        <div class="endpoint-header">
+          <span class="method-pill get">GET</span>
+          <span class="endpoint-path">/api/token</span>
+          <span class="endpoint-desc">Get active JioTV auth token</span>
+        </div>
+        <div class="endpoint-body">
+
+          <div class="info-box">
+            <span class="info-icon">🔑</span>
+            Returns the current JioTV session cookie/token required for streaming DRM-protected channels via Shaka Player. Cached for 60 seconds.
+          </div>
+
+          <div class="status-row">
+            <span class="status-badge s200">200 OK</span>
+            <span class="status-badge s500">500 Server Error</span>
+          </div>
+
+          <div class="code-block-wrap">
+            <div class="code-label">Response <button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+<pre>{
+  <span class="tok-key">"token"</span>: <span class="tok-str">"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."</span>
+}
+</pre>
+          </div>
+
+          <div class="code-block-wrap" style="margin-top:20px">
+            <div class="code-label">Usage with Shaka Player <button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+<pre><span class="tok-comment">// 1. Fetch token</span>
+<span class="tok-kw">const</span> { <span class="tok-var">token</span> } = <span class="tok-kw">await</span> (<span class="tok-kw">await</span> <span class="tok-fn">fetch</span>(<span class="tok-str">'/api/token'</span>)).<span class="tok-fn">json</span>();
+
+<span class="tok-comment">// 2. Configure Shaka with ClearKey + token header</span>
+<span class="tok-var">player</span>.<span class="tok-fn">configure</span>({
+  drm: {
+    clearKeys: { [<span class="tok-var">channel</span>.keyId]: <span class="tok-var">channel</span>.key },
+    advanced: {
+      <span class="tok-str">'org.w3.clearkey'</span>: {
+        headers: { <span class="tok-str">'cookie'</span>: <span class="tok-var">token</span> }
+      }
+    }
+  }
+});
+</pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <div class="divider"></div>
+
+    <!-- SHAKA PLAYER -->
+    <section class="section" id="player">
+      <h2 class="section-title">Shaka Player</h2>
+      <p class="section-sub">How to play JioTV streams. These are DRM-protected MPEG-DASH streams — Shaka Player is the only browser player that handles ClearKey + auth tokens correctly.</p>
+
+      <div class="info-box">
+        <span class="info-icon">📦</span>
+        Install: <code>npm install shaka-player</code> — use <strong>v4+</strong>. Older versions have broken ClearKey handling on Safari/iOS.
+      </div>
+
+      <div class="endpoint-card">
+        <div class="endpoint-header" style="border-bottom:none">
+          <span class="method-pill get" style="background:var(--purple-light);color:var(--purple)">HOW</span>
+          <span class="endpoint-path">Stream flow</span>
+          <span class="endpoint-desc">How it all connects</span>
+        </div>
+        <div class="endpoint-body">
+          <div class="schema-card">
+            <div class="schema-row"><span class="schema-key">1. /api/channels</span><span class="schema-desc">→ get <code>url</code>, <code>keyId</code>, <code>key</code> for a channel</span></div>
+            <div class="schema-row"><span class="schema-key">2. /api/token</span><span class="schema-desc">→ get session <code>token</code> (auth cookie for Akamai CDN)</span></div>
+            <div class="schema-row"><span class="schema-key">3. Shaka Player</span><span class="schema-desc">→ configure ClearKey DRM + inject token into every segment request</span></div>
+            <div class="schema-row"><span class="schema-key">4. player.load(url)</span><span class="schema-desc">→ seamless playback, auto-rebuffering on stall</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CLEARKEY DRM -->
+    <section id="player-clearkey">
+      <div class="endpoint-card">
+        <div class="endpoint-header">
+          <span class="method-pill get" style="background:var(--purple-light);color:var(--purple)">DRM</span>
+          <span class="endpoint-path">ClearKey configuration</span>
+          <span class="endpoint-desc">Most JioTV channels use ClearKey</span>
+        </div>
+        <div class="endpoint-body">
+          <div class="info-box">
+            <span class="info-icon">🔐</span>
+            JioTV channels use <strong>ClearKey DRM</strong> — the key and keyId come from the channel object directly. No license server round-trip needed; everything is in the API response.
+          </div>
+
+          <div class="code-block-wrap">
+            <div class="code-label">ClearKey DRM setup <button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+<pre><span class="tok-kw">import</span> shaka <span class="tok-kw">from</span> <span class="tok-str">'shaka-player/dist/shaka-player.ui.js'</span>;
+
+<span class="tok-comment">// Install polyfills first — required for iOS/Safari EME</span>
+shaka.polyfill.<span class="tok-fn">installAll</span>();
+
+<span class="tok-kw">const</span> <span class="tok-var">player</span> = <span class="tok-kw">new</span> shaka.<span class="tok-fn">Player</span>();
+<span class="tok-kw">await</span> <span class="tok-var">player</span>.<span class="tok-fn">attach</span>(<span class="tok-var">videoElement</span>);
+
+<span class="tok-comment">// Buffering / retry config — critical for live streams</span>
+<span class="tok-var">player</span>.<span class="tok-fn">configure</span>({
+  streaming: {
+    bufferingGoal: <span class="tok-num">30</span>,          <span class="tok-comment">// seconds ahead to buffer</span>
+    bufferBehind: <span class="tok-num">15</span>,           <span class="tok-comment">// seconds to keep behind</span>
+    retryParameters: {
+      maxAttempts: <span class="tok-num">5</span>,
+      baseDelay: <span class="tok-num">1000</span>,
+      backoffFactor: <span class="tok-num">2</span>,         <span class="tok-comment">// exponential backoff</span>
+    },
+  },
+  manifest: {
+    retryParameters: { maxAttempts: <span class="tok-num">5</span>, baseDelay: <span class="tok-num">1000</span>, backoffFactor: <span class="tok-num">2</span> },
+  },
+});
+
+<span class="tok-comment">// ClearKey DRM — keyId and key come from the channel object</span>
+<span class="tok-var">player</span>.<span class="tok-fn">configure</span>({
+  drm: {
+    clearKeys: {
+      [<span class="tok-var">channel</span>.keyId]: <span class="tok-var">channel</span>.key,  <span class="tok-comment">// hex keyId → hex key</span>
+    },
+    preferredKeySystems: [<span class="tok-str">'org.w3.clearkey'</span>],
+  },
+});
+
+<span class="tok-kw">await</span> <span class="tok-var">player</span>.<span class="tok-fn">load</span>(<span class="tok-var">channel</span>.url);
+<span class="tok-var">videoElement</span>.<span class="tok-fn">play</span>();
+</pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOKEN AUTH -->
+    <section id="player-token">
+      <div class="endpoint-card">
+        <div class="endpoint-header">
+          <span class="method-pill get" style="background:var(--orange-light);color:var(--orange)">AUTH</span>
+          <span class="endpoint-path">Token injection</span>
+          <span class="endpoint-desc">Akamai CDN auth for segments</span>
+        </div>
+        <div class="endpoint-body">
+          <div class="info-box">
+            <span class="info-icon">🌐</span>
+            JioTV segment URLs are served via Akamai CDN and require a session token appended as a query parameter. Without it, every segment request returns <code>403</code>. Inject it via Shaka's network request filter — this runs before every fetch automatically.
+          </div>
+
+          <div class="code-block-wrap">
+            <div class="code-label">Token request filter <button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+<pre><span class="tok-comment">// 1. Fetch the token from our API</span>
+<span class="tok-kw">const</span> { <span class="tok-var">token</span> } = <span class="tok-kw">await</span> (<span class="tok-kw">await</span> <span class="tok-fn">fetch</span>(<span class="tok-str">'/api/token'</span>)).<span class="tok-fn">json</span>();
+
+<span class="tok-comment">// 2. Register a request filter — runs before EVERY network request</span>
+<span class="tok-var">player</span>.<span class="tok-fn">getNetworkingEngine</span>().<span class="tok-fn">registerRequestFilter</span>((<span class="tok-var">type</span>, <span class="tok-var">request</span>) => {
+  <span class="tok-comment">// Skip DRM license requests — they don't need the token</span>
+  <span class="tok-kw">if</span> (<span class="tok-var">type</span> === shaka.net.NetworkingEngine.RequestType.LICENSE) <span class="tok-kw">return</span>;
+
+  <span class="tok-kw">const</span> <span class="tok-var">uri</span> = <span class="tok-var">request</span>.uris[<span class="tok-num">0</span>];
+
+  <span class="tok-comment">// Skip data: URIs (inline manifests) and already-signed URLs</span>
+  <span class="tok-kw">if</span> (!<span class="tok-var">uri</span> || <span class="tok-var">uri</span>.<span class="tok-fn">startsWith</span>(<span class="tok-str">'data:'</span>) || <span class="tok-var">uri</span>.<span class="tok-fn">includes</span>(<span class="tok-str">'__hdnea__'</span>)) <span class="tok-kw">return</span>;
+
+  <span class="tok-comment">// Append token as query param</span>
+  <span class="tok-kw">const</span> <span class="tok-var">sep</span> = <span class="tok-var">uri</span>.<span class="tok-fn">includes</span>(<span class="tok-str">'?'</span>) ? <span class="tok-str">'&'</span> : <span class="tok-str">'?'</span>;
+  <span class="tok-var">request</span>.uris[<span class="tok-num">0</span>] = <span class="tok-var">uri</span> + <span class="tok-var">sep</span> + <span class="tok-var">token</span>;
+});
+</pre>
+          </div>
+
+          <div class="info-box" style="background:var(--green-light);border-color:var(--green)">
+            <span class="info-icon">✅</span>
+            <strong>Why this works:</strong> The token from <code>/api/token</code> is the raw Akamai auth string (starts with <code>hdnts=</code> or similar). Appending it as a query param on every segment URL satisfies Akamai's CDN authentication check.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- REACT COMPONENT -->
+    <section id="player-react">
+      <div class="endpoint-card">
+        <div class="endpoint-header">
+          <span class="method-pill get" style="background:var(--accent-light);color:var(--accent)">JSX</span>
+          <span class="endpoint-path">React component</span>
+          <span class="endpoint-desc">Drop-in player for any channel</span>
+        </div>
+        <div class="endpoint-body">
+          <div class="info-box">
+            <span class="info-icon">⚛️</span>
+            Full lifecycle management — creates a player on mount, tears it down on unmount/channel change. The <code>url</code> and <code>clearKeyId</code>/<code>clearKey</code> come straight from the channels API response.
+          </div>
+
+          <div class="code-block-wrap">
+            <div class="code-label">ShakaPlayer.tsx <button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+<pre><span class="tok-kw">import</span> { useEffect, useRef, useState } <span class="tok-kw">from</span> <span class="tok-str">'react'</span>;
+<span class="tok-kw">import</span> shaka <span class="tok-kw">from</span> <span class="tok-str">'shaka-player/dist/shaka-player.ui.js'</span>;
+<span class="tok-kw">import</span> <span class="tok-str">'shaka-player/dist/controls.css'</span>;
+
+<span class="tok-kw">interface</span> <span class="tok-fn">Props</span> {
+  url: <span class="tok-fn">string</span>;
+  clearKeyId?: <span class="tok-fn">string</span>;   <span class="tok-comment">// from channel.keyId</span>
+  clearKey?: <span class="tok-fn">string</span>;      <span class="tok-comment">// from channel.key</span>
+  token?: <span class="tok-fn">string</span>;         <span class="tok-comment">// from /api/token</span>
+  licenseUrl?: <span class="tok-fn">string</span>;   <span class="tok-comment">// optional Widevine fallback</span>
+}
+
+<span class="tok-kw">export default function</span> <span class="tok-fn">ShakaPlayer</span>({ url, clearKeyId, clearKey, token, licenseUrl }: <span class="tok-fn">Props</span>) {
+  <span class="tok-kw">const</span> <span class="tok-var">videoRef</span> = <span class="tok-fn">useRef</span>&lt;<span class="tok-fn">HTMLVideoElement</span>&gt;(<span class="tok-null">null</span>);
+  <span class="tok-kw">const</span> <span class="tok-var">containerRef</span> = <span class="tok-fn">useRef</span>&lt;<span class="tok-fn">HTMLDivElement</span>&gt;(<span class="tok-null">null</span>);
+  <span class="tok-kw">const</span> [<span class="tok-var">error</span>, <span class="tok-var">setError</span>] = <span class="tok-fn">useState</span>&lt;<span class="tok-fn">string</span> | <span class="tok-null">null</span>&gt;(<span class="tok-null">null</span>);
+
+  <span class="tok-fn">useEffect</span>(() => {
+    <span class="tok-kw">let</span> <span class="tok-var">player</span>: <span class="tok-kw">any</span> = <span class="tok-null">null</span>;
+    <span class="tok-kw">let</span> <span class="tok-var">ui</span>: <span class="tok-kw">any</span> = <span class="tok-null">null</span>;
+    <span class="tok-kw">let</span> <span class="tok-var">mounted</span> = <span class="tok-bool">true</span>;
+
+    (<span class="tok-kw">async</span> () => {
+      shaka.polyfill.<span class="tok-fn">installAll</span>();
+      <span class="tok-kw">if</span> (!shaka.<span class="tok-fn">Player</span>.<span class="tok-fn">isBrowserSupported</span>()) { <span class="tok-var">setError</span>(<span class="tok-str">'Browser not supported'</span>); <span class="tok-kw">return</span>; }
+
+      <span class="tok-var">player</span> = <span class="tok-kw">new</span> shaka.<span class="tok-fn">Player</span>();
+      <span class="tok-kw">await</span> <span class="tok-var">player</span>.<span class="tok-fn">attach</span>(<span class="tok-var">videoRef</span>.current);
+
+      <span class="tok-comment">// Attach Shaka UI (built-in controls)</span>
+      <span class="tok-var">ui</span> = <span class="tok-kw">new</span> shaka.ui.<span class="tok-fn">Overlay</span>(<span class="tok-var">player</span>, <span class="tok-var">containerRef</span>.current, <span class="tok-var">videoRef</span>.current);
+
+      <span class="tok-var">player</span>.<span class="tok-fn">configure</span>({
+        streaming: { bufferingGoal: <span class="tok-num">30</span>, bufferBehind: <span class="tok-num">15</span>,
+          retryParameters: { maxAttempts: <span class="tok-num">5</span>, baseDelay: <span class="tok-num">1000</span>, backoffFactor: <span class="tok-num">2</span> } },
+        manifest: { retryParameters: { maxAttempts: <span class="tok-num">5</span>, baseDelay: <span class="tok-num">1000</span>, backoffFactor: <span class="tok-num">2</span> } },
+      });
+
+      <span class="tok-comment">// DRM: ClearKey (most channels) or Widevine fallback</span>
+      <span class="tok-kw">if</span> (<span class="tok-var">clearKeyId</span> && <span class="tok-var">clearKey</span>) {
+        <span class="tok-var">player</span>.<span class="tok-fn">configure</span>({ drm: {
+          clearKeys: { [<span class="tok-var">clearKeyId</span>]: <span class="tok-var">clearKey</span> },
+          preferredKeySystems: [<span class="tok-str">'org.w3.clearkey'</span>],
+        }});
+      } <span class="tok-kw">else if</span> (<span class="tok-var">licenseUrl</span>) {
+        <span class="tok-var">player</span>.<span class="tok-fn">configure</span>({ drm: { servers: {
+          <span class="tok-str">'org.w3.clearkey'</span>: <span class="tok-var">licenseUrl</span>,
+          <span class="tok-str">'com.widevine.alpha'</span>: <span class="tok-var">licenseUrl</span>,
+        }}});
+      }
+
+      <span class="tok-comment">// Token injection — appended to every segment URL</span>
+      <span class="tok-kw">if</span> (<span class="tok-var">token</span>) {
+        <span class="tok-var">player</span>.<span class="tok-fn">getNetworkingEngine</span>().<span class="tok-fn">registerRequestFilter</span>((<span class="tok-var">type</span>: <span class="tok-kw">any</span>, <span class="tok-var">req</span>: <span class="tok-kw">any</span>) => {
+          <span class="tok-kw">if</span> (<span class="tok-var">type</span> === shaka.net.NetworkingEngine.RequestType.LICENSE) <span class="tok-kw">return</span>;
+          <span class="tok-kw">const</span> <span class="tok-var">uri</span> = <span class="tok-var">req</span>.uris[<span class="tok-num">0</span>];
+          <span class="tok-kw">if</span> (!<span class="tok-var">uri</span> || <span class="tok-var">uri</span>.<span class="tok-fn">startsWith</span>(<span class="tok-str">'data:'</span>) || <span class="tok-var">uri</span>.<span class="tok-fn">includes</span>(<span class="tok-str">'__hdnea__'</span>)) <span class="tok-kw">return</span>;
+          <span class="tok-var">req</span>.uris[<span class="tok-num">0</span>] += (<span class="tok-var">uri</span>.<span class="tok-fn">includes</span>(<span class="tok-str">'?'</span>) ? <span class="tok-str">'&'</span> : <span class="tok-str">'?'</span>) + <span class="tok-var">token</span>;
+        });
+      }
+
+      <span class="tok-var">player</span>.<span class="tok-fn">addEventListener</span>(<span class="tok-str">'error'</span>, (<span class="tok-var">e</span>: <span class="tok-kw">any</span>) => {
+        <span class="tok-kw">if</span> (<span class="tok-var">e</span>.detail?.code === <span class="tok-num">7000</span>) <span class="tok-kw">return</span>; <span class="tok-comment">// load aborted — ignore</span>
+        <span class="tok-fn">setError</span>(<span class="tok-str">`Error ${e.detail?.code}`</span>);
+      });
+
+      <span class="tok-kw">try</span> {
+        <span class="tok-var">setError</span>(<span class="tok-null">null</span>);
+        <span class="tok-kw">await</span> <span class="tok-var">player</span>.<span class="tok-fn">load</span>(<span class="tok-var">url</span>);
+        <span class="tok-kw">if</span> (<span class="tok-var">mounted</span>) <span class="tok-var">videoRef</span>.current?.<span class="tok-fn">play</span>().<span class="tok-fn">catch</span>(() => {});
+      } <span class="tok-kw">catch</span> (<span class="tok-var">e</span>: <span class="tok-kw">any</span>) {
+        <span class="tok-kw">if</span> (<span class="tok-var">e</span>.code !== <span class="tok-num">7000</span>) <span class="tok-var">setError</span>(<span class="tok-str">`Playback error: ${e.message}`</span>);
+      }
+    })();
+
+    <span class="tok-kw">return</span> () => { <span class="tok-var">mounted</span> = <span class="tok-bool">false</span>; <span class="tok-var">ui</span>?.<span class="tok-fn">destroy</span>(); <span class="tok-var">player</span>?.<span class="tok-fn">destroy</span>(); };
+  }, [<span class="tok-var">url</span>, <span class="tok-var">clearKeyId</span>, <span class="tok-var">clearKey</span>, <span class="tok-var">token</span>]);
+
+  <span class="tok-kw">return</span> (
+    &lt;<span class="tok-fn">div</span> style={{ position:<span class="tok-str">'relative'</span>, aspectRatio:<span class="tok-str">'16/9'</span>, background:<span class="tok-str">'#000'</span> }}&gt;
+      &lt;<span class="tok-fn">div</span> ref={<span class="tok-var">containerRef</span>} style={{ width:<span class="tok-str">'100%'</span>, height:<span class="tok-str">'100%'</span> }}&gt;
+        &lt;<span class="tok-fn">video</span> ref={<span class="tok-var">videoRef</span>} style={{ width:<span class="tok-str">'100%'</span>, height:<span class="tok-str">'100%'</span> }} autoPlay /&gt;
+      &lt;/<span class="tok-fn">div</span>&gt;
+      {<span class="tok-var">error</span> && &lt;<span class="tok-fn">div</span> style={{ position:<span class="tok-str">'absolute'</span>, inset:<span class="tok-num">0</span>, display:<span class="tok-str">'flex'</span>, alignItems:<span class="tok-str">'center'</span>, justifyContent:<span class="tok-str">'center'</span>, background:<span class="tok-str">'rgba(0,0,0,0.8)'</span>, color:<span class="tok-str">'#ff6b6b'</span> }}&gt;{<span class="tok-var">error</span>}&lt;/<span class="tok-fn">div</span>&gt;}
+    &lt;/<span class="tok-fn">div</span>&gt;
+  );
+}
+</pre>
+          </div>
+
+          <div class="code-block-wrap" style="margin-top:20px">
+            <div class="code-label">Usage <button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+<pre><span class="tok-comment">// Fetch channel + token in parallel</span>
+<span class="tok-kw">const</span> [{ channels }, { token }] = <span class="tok-kw">await</span> <span class="tok-fn">Promise</span>.<span class="tok-fn">all</span>([
+  <span class="tok-fn">fetch</span>(<span class="tok-str">'/api/channels'</span>).<span class="tok-fn">then</span>(<span class="tok-var">r</span> => <span class="tok-var">r</span>.<span class="tok-fn">json</span>()),
+  <span class="tok-fn">fetch</span>(<span class="tok-str">'/api/token'</span>).<span class="tok-fn">then</span>(<span class="tok-var">r</span> => <span class="tok-var">r</span>.<span class="tok-fn">json</span>()),
+]);
+<span class="tok-kw">const</span> <span class="tok-var">channel</span> = channels[<span class="tok-num">0</span>];
+
+<span class="tok-comment">// Render</span>
+&lt;<span class="tok-fn">ShakaPlayer</span>
+  url={<span class="tok-var">channel</span>.url}
+  clearKeyId={<span class="tok-var">channel</span>.keyId}
+  clearKey={<span class="tok-var">channel</span>.key}
+  token={<span class="tok-var">token</span>}
+/&gt;
+</pre>
+          </div>
+
+          <div class="info-box" style="background:var(--orange-light);border-color:var(--orange)">
+            <span class="info-icon">⚠️</span>
+            <strong>iOS/Safari note:</strong> <code>shaka.polyfill.installAll()</code> must run before any player is constructed. On iOS, autoplay requires the video element to be user-gesture triggered or muted. Call <code>videoRef.current.muted = true</code> if autoplay fails.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SCHEMAS -->
+    <section class="section" id="schemas">
+      <h2 class="section-title">Schemas</h2>
+      <p class="section-sub">TypeScript interface for the Channel object.</p>
+
+      <div class="code-block-wrap">
+        <div class="code-label">TypeScript <button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+<pre><span class="tok-kw">interface</span> <span class="tok-fn">Channel</span> {
+  id:          <span class="tok-fn">string</span>;          <span class="tok-comment">// Unique channel identifier</span>
+  name:        <span class="tok-fn">string</span>;          <span class="tok-comment">// Display name</span>
+  category:    <span class="tok-fn">string</span>;          <span class="tok-comment">// e.g. "Sports", "News"</span>
+  logo:        <span class="tok-fn">string</span>;          <span class="tok-comment">// CDN logo image URL</span>
+  url:         <span class="tok-fn">string</span>;          <span class="tok-comment">// MPD/M3U8 stream URL</span>
+  keyId?:      <span class="tok-fn">string</span>;          <span class="tok-comment">// ClearKey DRM key ID (hex)</span>
+  key?:        <span class="tok-fn">string</span>;          <span class="tok-comment">// ClearKey DRM key (hex)</span>
+  licenseUrl?: <span class="tok-fn">string</span> | <span class="tok-null">null</span>;  <span class="tok-comment">// Widevine license URL if applicable</span>
+}
+
+<span class="tok-kw">interface</span> <span class="tok-fn">ChannelsResponse</span> {
+  total:    <span class="tok-fn">number</span>;
+  offset:   <span class="tok-fn">number</span>;
+  limit:    <span class="tok-fn">number</span>;
+  channels: <span class="tok-fn">Channel</span>[];
+}
+
+<span class="tok-kw">interface</span> <span class="tok-fn">CategoriesResponse</span> {
+  total:      <span class="tok-fn">number</span>;
+  categories: <span class="tok-fn">string</span>[];
+}
+
+<span class="tok-kw">interface</span> <span class="tok-fn">TokenResponse</span> {
+  token: <span class="tok-fn">string</span> | <span class="tok-null">null</span>;
+}
+</pre>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ERRORS -->
+    <section class="section" id="errors">
+      <h2 class="section-title">Errors</h2>
+      <p class="section-sub">All errors return a JSON body with an <code>error</code> field.</p>
+
+      <div class="endpoint-card">
+        <div class="endpoint-body" style="padding:20px 24px">
+          <table class="param-table">
+            <thead>
+              <tr><th>Status</th><th>Meaning</th><th>Body</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="status-badge s200" style="display:inline-flex">200</span></td>
+                <td style="color:var(--text3)">Success</td>
+                <td style="font-family:var(--font-mono);font-size:12px;color:var(--text3)">Response payload</td>
+              </tr>
+              <tr>
+                <td><span class="status-badge s500" style="display:inline-flex">500</span></td>
+                <td style="color:var(--text3)">Upstream fetch failed</td>
+                <td style="font-family:var(--font-mono);font-size:12px;color:var(--text3)">{"error":"Failed to fetch channels"}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- CACHING -->
+    <section class="section" id="caching">
+      <h2 class="section-title">Caching</h2>
+      <p class="section-sub">All endpoints use Vercel Edge Cache via <code>Cache-Control</code> headers.</p>
+
+      <div class="endpoint-card">
+        <div class="endpoint-body" style="padding:20px 24px">
+          <table class="param-table">
+            <thead>
+              <tr><th>Endpoint</th><th>Cache TTL</th><th>Reason</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="param-name">/api/channels</span></td>
+                <td><span class="status-badge s200" style="display:inline-flex;font-size:11px">5 min</span></td>
+                <td style="color:var(--text3)">Channel list rarely changes</td>
+              </tr>
+              <tr>
+                <td><span class="param-name">/api/categories</span></td>
+                <td><span class="status-badge s200" style="display:inline-flex;font-size:11px">10 min</span></td>
+                <td style="color:var(--text3)">Categories are very stable</td>
+              </tr>
+              <tr>
+                <td><span class="param-name">/api/token</span></td>
+                <td><span class="status-badge s400" style="display:inline-flex;font-size:11px">60 sec</span></td>
+                <td style="color:var(--text3)">Auth tokens rotate frequently</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <div style="padding-top:20px;border-top:1px solid var(--border)">
+      <p style="font-size:13px;color:var(--text4)">
+        uvylive API — built by <a href="https://instagram.com/nikkk.exe" style="color:var(--accent);text-decoration:none">@nikkk.exe</a> ·
+        <a href="https://nikshep.vercel.app" style="color:var(--accent);text-decoration:none">nikshep.vercel.app</a>
+      </p>
+    </div>
+
+  </main>
+</div>
+
+<script>
+  // Tab switching — used by onclick="switchTab(event, 'group')"
+  function switchTab(e, group) {
+    const tab = e.currentTarget;
+    const wrap = tab.closest('.endpoint-body') || tab.closest('.section') || tab.parentElement.parentElement;
+    const tabs = tab.parentElement.querySelectorAll('.tab');
+    const idx = Array.from(tabs).indexOf(tab);
+    const prefix = group + '-';
+    tabs.forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    // hide all tab-content siblings in same wrap
+    wrap.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    // show the matching one — find by id pattern {group}-{idx}
+    const target = wrap.querySelector(`#${prefix}${idx}`) || wrap.querySelectorAll('.tab-content')[idx];
+    if (target) target.classList.add('active');
+  }
+
+  // Copy code
+  function copyCode(btn) {
+    const pre = btn.closest('.code-block-wrap').querySelector('pre');
+    navigator.clipboard.writeText(pre.innerText.trim()).then(() => {
+      btn.textContent = 'Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+    });
+  }
+
+  function copyText(text, btn) {
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = 'Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+    });
+  }
+
+  // Scrollspy
+  const sections = document.querySelectorAll('section[id], div[id]');
+  const sideItems = document.querySelectorAll('.sidebar-item');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        sideItems.forEach(item => {
+          item.classList.toggle('active', item.getAttribute('href') === '#' + e.target.id);
+        });
+      }
+    });
+  }, { rootMargin: '-60px 0px -70% 0px' });
+  sections.forEach(s => observer.observe(s));
+</script>
+
+</body>
+</html>
