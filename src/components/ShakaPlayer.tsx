@@ -124,11 +124,7 @@ export default function ShakaPlayer({ url, clearKeyId, clearKey, licenseUrl, tok
         </div>
       )}
       {/* Watermark */}
-      <div className="absolute top-3 right-3 z-30 pointer-events-none select-none">
-        <span className="text-sm font-bold text-white/25 tracking-wide drop-shadow" style={{ textShadow: '0 1px 6px rgba(0,0,0,0.9)' }}>
-          nikshep uvylive
-        </span>
-      </div>
+      
     </div>
   );
 }
