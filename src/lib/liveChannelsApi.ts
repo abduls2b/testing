@@ -14,7 +14,7 @@ let _cache: Channel[] | null = null;
 let _tokenCache: string | null = null;
 
 const ALLOWED_CATEGORIES = new Set([
-  'English', 'Entertainment', 'Movies', 'Telugu', 'News', 'Sports', 'Kannada',
+  'Sports', 'Entertainment', 'Movies', 'English', 'Gujarati', 'Infotainment', 'Urdu', 'Kids', 'Music', 'News',
 ]);
 
 export async function fetchChannels(): Promise<Channel[]> {
