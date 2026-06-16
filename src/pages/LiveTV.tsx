@@ -18,12 +18,6 @@ const CATEGORY_ORDER: { key: string; label: string }[] = [
   { key: 'News',          label: 'News' },
 ];
 
-function PageFooter() {
-  return (
-    
-  );
-}
-
 export default function LiveTV() {
   const [channels, setChannels] = useState<Channel[]>([]);
   const [loading, setLoading] = useState(true);
