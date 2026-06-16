@@ -48,7 +48,7 @@ export default function LiveTV() {
   }
 
   return (
-    <div className="min-h-screen bg-white text-black flex flex-col">
+    <div className="min-h-screen bg-black text-white flex flex-col">
       <div className="flex-1 px-4 md:px-8 py-5">
         {filteredChannels ? (
           <div>
