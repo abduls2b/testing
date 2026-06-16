@@ -20,22 +20,7 @@ const CATEGORY_ORDER: { key: string; label: string }[] = [
 
 function PageFooter() {
   return (
-    <div className="w-full flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-5 px-5 py-4 border-t border-white/5 text-[11px] text-zinc-500 mt-2">
-      <div className="flex items-center gap-1.5">
-        <Instagram size={11} className="text-pink-500 shrink-0" />
-        <span>Follow Nikshep on Instagram</span>
-        <a href="https://instagram.com/nikkk.exe" target="_blank" rel="noopener noreferrer" className="text-pink-400 font-bold hover:text-pink-300 transition-colors">@nikkk.exe</a>
-      </div>
-      <span className="hidden sm:inline text-zinc-800">·</span>
-      <div className="flex items-center gap-1">
-        <span>movies &amp; more →</span>
-        <a href="https://zestyyflix.vercel.app" target="_blank" rel="noopener noreferrer" className="text-amber-400 font-bold hover:text-amber-300 transition-colors flex items-center gap-0.5">
-          zestyyflix.vercel.app <ExternalLink size={9} />
-        </a>
-      </div>
-      <span className="hidden sm:inline text-zinc-800">·</span>
-      <span className="text-zinc-700">adfree by Nikshep</span>
-    </div>
+    
   );
 }
 
