@@ -171,7 +171,7 @@ export default function LiveTV() {
 
 function CategoryRow({
   label, channels, onChannelClick, onShowMore
-}: {
+}) {
   category: string;
   label: string;
   channels: Channel[];
