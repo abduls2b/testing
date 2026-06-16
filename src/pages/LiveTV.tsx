@@ -40,7 +40,7 @@ export default function LiveTV() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-white text-black flex flex-col items-center justify-center gap-4">
+      <div className="min-h-screen text-black flex flex-col items-center justify-center gap-4">
         <Loader2 className="w-6 h-6 animate-spin text-white/20" />
         <p className="text-[9px] text-zinc-700 font-black uppercase tracking-[8px]">Loading</p>
       </div>
