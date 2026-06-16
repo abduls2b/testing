@@ -10,6 +10,11 @@ const CATEGORY_ORDER: { key: string; label: string }[] = [
   { key: 'Entertainment', label: 'Entertainment' },
   { key: 'Movies',        label: 'Movies' },
   { key: 'English',       label: 'English' },
+  { key: 'Gujarati',      label: 'Gujarati' },
+  { key: 'Infotainment',  label: 'Infotainment' },
+  { key: 'Urdu',          label: 'Urdu' },
+  { key: 'Kids',          label: 'Kids' },
+  { key: 'Music',         label: 'Music' },
   { key: 'News',          label: 'News' },
 ];
 
