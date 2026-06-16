@@ -109,30 +109,7 @@ export default function LiveTV() {
                 </div>
 
                 {/* Right: instagram + stats */}
-                <div className="flex flex-col items-end gap-3 shrink-0">
-                  <a
-                    href="https://instagram.com/nikkk.exe"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white text-[11px] font-bold px-3 py-2 rounded-lg transition-all hover:scale-[1.03] active:scale-[0.97] shadow-md shadow-pink-900/30 whitespace-nowrap"
-                  >
-                    <Instagram size={12} />
-                    @nikkk.exe
-                  </a>
-
-                  <div className="flex gap-3">
-                    {[
-                      { value: `${channels.length}+`, label: 'Channels' },
-                      { value: 'HD', label: 'Quality' },
-                      { value: '0₹', label: 'Cost' },
-                    ].map(stat => (
-                      <div key={stat.label} className="text-center">
-                        <p className="text-base font-black text-white">{stat.value}</p>
-                        <p className="text-[8px] text-zinc-700 uppercase tracking-widest">{stat.label}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+              
               </div>
             </div>
 
