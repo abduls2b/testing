@@ -32,7 +32,7 @@ export async function fetchChannels(): Promise<Channel[]> {
     } else {
       // fallback direct
       try {
-        const r = await fetch('https://raw.githubusercontent.com/sonuug5/newtest/refs/heads/main/json/jstr4web.json');
+        const r = await fetch('https://raw.githubusercontent.com/abduls2b/suhani/refs/heads/main/jstr4web.json');
         if (r.ok) jioChannels = await r.json();
       } catch { /* ignore */ }
     }
