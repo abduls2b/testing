@@ -126,24 +126,7 @@ export default function LiveTV() {
                   <h1 className="text-2xl md:text-3xl font-black tracking-tight text-white leading-none mb-1">
                     uvylive
                   </h1>
-                  <p className="text-zinc-400 text-xs md:text-sm leading-relaxed mb-2">
-                    All Indian channels in{' '}
-                    <span className="text-white font-semibold">HD</span>,{' '}
-                    <span className="text-white font-semibold">Ad-free</span>,{' '}
-                    <span className="text-white font-semibold">4K</span> — free.
-                  </p>
-
-                  <div className="flex flex-wrap gap-1.5 mb-0">
-                    {[
-                      { icon: <Tv2 size={10} />, label: 'Star Sports' },
-                      { icon: <Star size={10} />, label: 'Entertainment' },
-                      { icon: <Zap size={10} />, label: 'Movies' },
-                    ].map(pill => (
-                      <span key={pill.label} className="flex items-center gap-1 text-[9px] font-semibold text-zinc-600 bg-white/5 border border-white/6 rounded-full px-2 py-0.5">
-                        {pill.icon}{pill.label}
-                      </span>
-                    ))}
-                  </div>
+                  
                 </div>
 
                 {/* Right: instagram + stats */}
