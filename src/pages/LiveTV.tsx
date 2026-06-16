@@ -167,7 +167,7 @@ export default function LiveTV() {
         )}
       </div>
 
-      <PageFooter />
+      
     </div>
   );
 }
