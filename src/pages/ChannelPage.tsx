@@ -7,16 +7,7 @@ import ShakaPlayer from '../components/ShakaPlayer';
 function PlayerFooter() {
   return (
     <div className="w-full flex flex-col sm:flex-row items-center justify-center sm:justify-between gap-2 px-4 py-3 bg-zinc-900/80 border-t border-white/5 text-[12px] text-zinc-500">
-      <div className="flex items-center gap-1.5">
-        <Instagram size={13} className="text-pink-500 shrink-0" />
-        <span>Follow</span>
-        
-      </div>
-      <div className="flex items-center gap-1.5">
-        
-        <span className="text-zinc-700 hidden sm:inline">·</span>
-        <span className="hidden sm:inline text-zinc-600">adfree service by Nikshep</span>
-      </div>
+      
     </div>
   );
 }
