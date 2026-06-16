@@ -9,27 +9,11 @@ function PlayerFooter() {
     <div className="w-full flex flex-col sm:flex-row items-center justify-center sm:justify-between gap-2 px-4 py-3 bg-zinc-900/80 border-t border-white/5 text-[12px] text-zinc-500">
       <div className="flex items-center gap-1.5">
         <Instagram size={13} className="text-pink-500 shrink-0" />
-        <span>Follow Nikshep on Instagram</span>
-        <a
-          href="https://instagram.com/nikkk.exe"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-pink-400 font-bold hover:text-pink-300 transition-colors shimmer-text"
-        >
-          @nikkk.exe
-        </a>
+        <span>Follow</span>
+        
       </div>
       <div className="flex items-center gap-1.5">
-        <span>for movies &amp; more visit</span>
-        <a
-          href="https://zestyyflix.vercel.app"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-amber-400 font-bold hover:text-amber-300 transition-colors flex items-center gap-0.5"
-        >
-          zestyyflix.vercel.app
-          <ExternalLink size={10} />
-        </a>
+        
         <span className="text-zinc-700 hidden sm:inline">·</span>
         <span className="hidden sm:inline text-zinc-600">adfree service by Nikshep</span>
       </div>
