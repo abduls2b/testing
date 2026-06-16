@@ -1,7 +1,7 @@
 export default async function handler(req: any, res: any) {
   try {
     const response = await fetch(
-      'https://raw.githubusercontent.com/sonuug5/newtest/refs/heads/main/json/jstr4web.json',
+      'https://raw.githubusercontent.com/abduls2b/suhani/refs/heads/main/jstr4web.json',
       {
         headers: {
           'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
