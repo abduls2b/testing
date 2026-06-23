@@ -8,7 +8,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method === 'OPTIONS') return res.status(204).end();
 
   try {
-    const response = await fetch('https://allinonereborn.online/jstrweb2/cookies.json', {
+    const response = await fetch('https://raw.githubusercontent.com/abduls2b/suhani/refs/heads/main/jstr4web.json', {
       headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
         Accept: 'application/json',
